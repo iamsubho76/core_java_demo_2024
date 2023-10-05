@@ -16,3 +16,8 @@ https://javaconceptoftheday.com/hashset-vs-linkedhashset-vs-treeset-in-java/
 ## Java Generics
 https://www.programiz.com/java-programming/generics
 
+## Future vs CompletableFuture in Java –
+https://www.youtube.com/watch?v=3rJBLFA95Io
+and below is code for the same
+https://github.com/Java-Techie-jt/springboot-multithreading-example
+https://blog.knoldus.com/future-vs-completablefuture-1/#:~:text=While%20using%20Future%2C%20we%20do,as%20per%20our%20use%20case. 
