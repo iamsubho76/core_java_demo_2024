@@ -3,7 +3,11 @@ package com.org.core.java.demo.stream.functional_interface;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,19 +15,46 @@ public class TestAllFunctionalInterfaces {
     public static void main(String[] args) {
         TestAllFunctionalInterfaces testAllFunctionalInterfaces  = new TestAllFunctionalInterfaces();
         System.out.println("***************Consumer***************");
+        /**
+         * Consumer having these methods
+         * void accept(T t);
+         * default Consumer<T> andThen(Consumer<? super T> after);
+         */
         testAllFunctionalInterfaces.whenNamesPresentConsumeAll();
-        System.out.println("######################################");
         testAllFunctionalInterfaces.whenNamesPresentUseBothConsumer();
+        System.out.println("######################################");
         System.out.println("\n***************Supplier***************");
+        /**
+         * Supplier having these methods
+         * IntSupplier int getAsInt();
+         * DoubleSupplier double getAsDouble();
+         * LongSupplier long getAsLong();
+         * BooleanSupplier boolean getAsBoolean();
+         */
         testAllFunctionalInterfaces.supplier();
-        System.out.println("######################################");
         testAllFunctionalInterfaces.supplierWithOptional();
-        System.out.println("\n***************Predicate***************");
-        testAllFunctionalInterfaces.testPredicate();
         System.out.println("######################################");
+        System.out.println("\n***************Predicate***************");
+        /**
+         * Predicate having these methods
+         * default Predicate<T> and(Predicate<? super T> other);
+         * default Predicate<T> or(Predicate<? super T> other);
+         * static <T> Predicate<T> isEquals(Object targetRef);
+         * default Predicate<T> negate();
+         */
+        testAllFunctionalInterfaces.testPredicate();
         testAllFunctionalInterfaces.testPredicateAndComposition();
+        System.out.println("######################################");
         System.out.println("\n***************Function***************");
+        /**
+         * Function having these methods
+         * R apply(T t);
+         * default <V> Function<V, R> compose(Function<? super V, ? extends T> before);
+         * default <V> Function<T, V> andThen(Function<? super R, ? extends V> after);
+         * static <T> Function<T, T> identity();
+         */
         testAllFunctionalInterfaces.testFunctions();
+        System.out.println("######################################");
     }
 
 
