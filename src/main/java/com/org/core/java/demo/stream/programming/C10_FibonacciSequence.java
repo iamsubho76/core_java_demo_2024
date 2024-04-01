@@ -3,7 +3,7 @@ package com.org.core.java.demo.stream.programming;
 import java.util.stream.Stream;
 
 //Write a program to calculate the Fibonacci sequence up to a given number using Java 8 streams.
-
+// This is HARD problem
 public class C10_FibonacciSequence {
     public static void main(String[] args) {
         int limit = 10;

@@ -13,7 +13,7 @@ public class C1_FrequencyCounter {
                 .mapToObj(c -> (char) c)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        System.out.println("Character frequency of single work: " + singleWordfrequencyMap);
+        System.out.println("Character frequency of single word: " + singleWordfrequencyMap);
 
 
         System.out.println("===============================================================");
@@ -22,8 +22,15 @@ public class C1_FrequencyCounter {
         LinkedHashMap<String, Long> completeSentenceFrequencyMap = Arrays.stream(s.split(""))
                 .map(String::toLowerCase)
                 .collect(Collectors.groupingBy(strVal -> strVal, LinkedHashMap::new, Collectors.counting()));
+        System.out.println("Character frequency of complete sentence v1: " + completeSentenceFrequencyMap);
 
-        System.out.println("Character frequency of complete sentence: " + completeSentenceFrequencyMap);
+        // below one is better approach
+        LinkedHashMap<Character, Long> collect = s.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+        ;
+
+        System.out.println("Character frequency of complete sentence v2: " + collect);
 
 
         System.out.println("===============================================================");
@@ -39,6 +46,27 @@ public class C1_FrequencyCounter {
         System.out.println("Word frequency of complete sentence: " + namesCount);
         System.out.println("Total number of elements:: " + names.stream().count());
 
+        String getRepeatedWordCount = "aa bb gg hh yy uu aa bb";
+
+        // Collect words into a LinkedHashMap with counts
+        LinkedHashMap<String, Long> wordCounts = Arrays.stream(getRepeatedWordCount.split(" "))
+                .map(String::toLowerCase)
+                .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+
+        // Skip the first n - 2 entries and limit to the last two entries
+        Map<String, Long> lastTwoRepeatedWords = wordCounts.entrySet().stream()
+                .skip(Math.max(0, wordCounts.size() - 2))
+                .limit(2)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        System.out.println("Last two repeated words : " + lastTwoRepeatedWords);
+
+        // Skip the first n - 2 entries and limit to the last two entries
+        Map<String, Long> firstTwoRepeatedWords = wordCounts.entrySet().stream()
+                .limit(2)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        System.out.println("First two repeated words : " + firstTwoRepeatedWords);
 
         System.out.println("===============================================================");
 

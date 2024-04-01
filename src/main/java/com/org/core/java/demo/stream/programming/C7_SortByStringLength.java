@@ -1,6 +1,7 @@
 package com.org.core.java.demo.stream.programming;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,10 @@ public class C7_SortByStringLength {
         List<String> strings = Arrays.asList("apple", "banana", "orange", "strawberry", "pineapple");
 
         List<String> sorted = strings.stream()
-                .sorted((s1, s2) -> Integer.compare(s2.length(), s1.length()))
+//                .sorted((s1, s2) -> Integer.compare(s2.length(), s1.length()))
+//                .collect(Collectors.toList());
+                //below approach better
+        .sorted(Comparator.comparingInt(String::length).reversed())
                 .collect(Collectors.toList());
 
         System.out.println("Strings sorted by length: " + sorted);

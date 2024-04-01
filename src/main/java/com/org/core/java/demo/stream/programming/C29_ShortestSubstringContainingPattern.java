@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//Implement a method to find the shortest substring containing all characters of a given pattern in a string using Java 8 streams.
+//Implement a method to find the shortest substring containing all characters of a
+// given pattern in a string using Java 8 streams.
+
+//This is HARD problem
 public class C29_ShortestSubstringContainingPattern {
     public static void main(String[] args) {
         String str = "XAYAXBZ";
