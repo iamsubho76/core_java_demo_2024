@@ -123,6 +123,39 @@ WHEN NOT MATCHED THEN
 
 
 ============================================================================================================
+
+Question: delete duplicate records in sql
+Answer: We use the SQL MAX function to calculate the max id of each data row.
+
+        SELECT *
+            FROM [SampleDB].[dbo].[Employee]
+            WHERE ID NOT IN
+            (
+                SELECT MAX(ID)
+                FROM [SampleDB].[dbo].[Employee]
+                GROUP BY [FirstName],
+                         [LastName],
+                         [Country]
+            );
+
+In the following screenshot, we can see that the above Select statement excludes the Max id of
+each duplicate row and we get only the minimum ID value.
+![](resources/img.png)
+To remove this data, replace the first Select with the SQL delete statement as per the following query.
+
+DELETE FROM [SampleDB].[dbo].[Employee]
+    WHERE ID NOT IN
+    (
+        SELECT MAX(ID) AS MaxRecordID
+        FROM [SampleDB].[dbo].[Employee]
+        GROUP BY [FirstName],
+                 [LastName],
+                 [Country]
+    );
+Once you execute the delete statement, perform a select on an Employee table,
+and we get the following records that do not contain duplicate rows.
+![](resources/img_1.png)
+============================================================================================================
 Question:: What is a correlated subquery? Provide an example.
 
 Example:
