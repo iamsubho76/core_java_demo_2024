@@ -2,7 +2,7 @@ package com.org.core.java.demo.other;
 
 import java.util.HashMap;
 
-public final class ImmutableClassWithoutDeepCopyNOtRecomendedExample {
+public final class ImmutableClassWithoutDeepCopyNOtRecommendedExample {
 
     // fields of the FinalClassExample class
     private final int id;
@@ -12,7 +12,7 @@ public final class ImmutableClassWithoutDeepCopyNOtRecomendedExample {
     private final HashMap<String, String> testMap;
 
 
-    public ImmutableClassWithoutDeepCopyNOtRecomendedExample(int i, String n, HashMap<String, String> hm) {
+    public ImmutableClassWithoutDeepCopyNOtRecommendedExample(int i, String n, HashMap<String, String> hm) {
         System.out.println("Performing Shallow Copy for Object initialization");
         this.id = i;
         this.name = n;
@@ -28,7 +28,7 @@ public final class ImmutableClassWithoutDeepCopyNOtRecomendedExample {
 
         int i = 10;
 
-        ImmutableClassWithoutDeepCopyNOtRecomendedExample ce = new ImmutableClassWithoutDeepCopyNOtRecomendedExample(i, s, h1);
+        ImmutableClassWithoutDeepCopyNOtRecommendedExample ce = new ImmutableClassWithoutDeepCopyNOtRecommendedExample(i, s, h1);
 
         // print the ce values
         System.out.println("ce id: " + ce.getId());

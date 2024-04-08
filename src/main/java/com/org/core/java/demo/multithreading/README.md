@@ -68,3 +68,187 @@ In summary, while `synchronized` blocks are simpler to use and understand, `Reen
    - **Example**: Concurrent execution of multiple tasks, parallel processing of data, and managing asynchronous computations.
 
 In summary, while all these concurrency utilities provide synchronization mechanisms for coordinating threads, they have different use cases, behaviors, and characteristics. The choice of which utility to use depends on the specific requirements and constraints of the application.
+
+
+## Example of deadlock and strive with proper example java
+
+Sure, let's start with a simple example of a deadlock scenario followed by an example demonstrating how to avoid deadlock using a strategy called "strive".
+
+### Example of Deadlock:
+
+In a deadlock scenario, two or more threads are waiting for resources that are held by each other, resulting in a circular dependency. Here's a classic example of a deadlock involving two threads and two locks:
+
+```java
+public class DeadlockExample {
+    private static final Object lock1 = new Object();
+    private static final Object lock2 = new Object();
+
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(() -> {
+            synchronized (lock1) {
+                System.out.println("Thread 1 acquired lock1");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (lock2) {
+                    System.out.println("Thread 1 acquired lock2");
+                }
+            }
+        });
+
+        Thread thread2 = new Thread(() -> {
+            synchronized (lock2) {
+                System.out.println("Thread 2 acquired lock2");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (lock1) {
+                    System.out.println("Thread 2 acquired lock1");
+                }
+            }
+        });
+
+        thread1.start();
+        thread2.start();
+    }
+}
+```
+
+In this example, `Thread 1` locks `lock1` and then attempts to acquire `lock2`, while `Thread 2` locks `lock2` and then attempts to acquire `lock1`. Both threads are waiting for each other to release the lock they need, resulting in a deadlock.
+
+### Example of Strive (Avoiding Deadlock):
+
+To avoid deadlock, you can ensure that threads acquire locks in a consistent order. One common approach is to assign a global ordering of locks and always acquire them in that order.
+
+```java
+public class StriveExample {
+    private static final Object lock1 = new Object();
+    private static final Object lock2 = new Object();
+
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(() -> {
+            synchronized (lock1) {
+                System.out.println("Thread 1 acquired lock1");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (lock2) {
+                    System.out.println("Thread 1 acquired lock2");
+                }
+            }
+        });
+
+        Thread thread2 = new Thread(() -> {
+            synchronized (lock1) {
+                System.out.println("Thread 2 acquired lock1");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (lock2) {
+                    System.out.println("Thread 2 acquired lock2");
+                }
+            }
+        });
+
+        thread1.start();
+        thread2.start();
+    }
+}
+```
+
+In this example, both `Thread 1` and `Thread 2` acquire `lock1` before `lock2`, ensuring a consistent order of lock acquisition. This prevents the possibility of a circular dependency and avoids deadlock.
+
+While the "strive" approach can effectively prevent deadlocks, it requires careful design and coordination to ensure that locks are acquired in a consistent order throughout the application.
+
+
+## Example of race condition with proper example
+
+A race condition occurs when the behavior of a program depends on the relative timing of concurrent operations. It typically arises in a multithreaded environment where two or more threads access shared resources concurrently, and the final outcome depends on the order of execution of these threads. Here's a simple example of a race condition in Java:
+
+```java
+public class RaceConditionExample {
+    private static int counter = 0;
+
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                counter++;
+            }
+        });
+
+        Thread thread2 = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                counter++;
+            }
+        });
+
+        thread1.start();
+        thread2.start();
+
+        // Wait for threads to complete
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Final counter value: " + counter);
+    }
+}
+```
+
+In this example:
+
+- We have a shared variable `counter` initialized to 0.
+- We create two threads (`thread1` and `thread2`) that increment the `counter` variable 10,000 times each.
+- Both threads are started concurrently.
+- Due to the interleaved execution of threads, the increments performed by one thread may be overwritten by the other thread, leading to incorrect results.
+- The final value of `counter` printed at the end may vary unpredictably between runs, demonstrating the race condition.
+
+To fix this race condition, you can use synchronization mechanisms like `synchronized` blocks or `AtomicInteger` to ensure that access to the shared variable is properly synchronized between threads. Here's the same example using `AtomicInteger` to avoid the race condition:
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class RaceConditionFixedExample {
+    private static AtomicInteger counter = new AtomicInteger(0);
+
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                counter.incrementAndGet();
+            }
+        });
+
+        Thread thread2 = new Thread(() -> {
+            for (int i = 0; i < 10000; i++) {
+                counter.incrementAndGet();
+            }
+        });
+
+        thread1.start();
+        thread2.start();
+
+        // Wait for threads to complete
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Final counter value: " + counter);
+    }
+}
+```
+
+In this fixed example, `AtomicInteger` is used instead of `int` for the `counter` variable. `AtomicInteger` provides atomic operations, ensuring that increments are performed atomically without the risk of race conditions.
