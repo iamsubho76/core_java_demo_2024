@@ -124,3 +124,49 @@ Here's a simplified explanation of how `ArrayList` increases its size automatica
    - Additionally, `ArrayList` provides a buffer space (a certain percentage of the capacity) to accommodate future insertions without immediate resizing.
 
 In this example, you can see how the capacity of the `ArrayList` increases automatically as elements are added beyond its initial capacity. The `getCapacity()` method is a non-standard method to retrieve the capacity of an `ArrayList`, which is not part of the standard `List` interface.
+
+
+
+## Difference between fail-safe and fail-fast iterators
+
+Fail-safe and fail-fast are two different strategies used in handling concurrent modifications to data structures, particularly in iterators.
+
+### Fail-Fast Iterator:
+- **Behavior**: Fail-fast iterators immediately throw a `ConcurrentModificationException` if the underlying collection is modified structurally while iterating.
+- **Implementation**: They operate directly on the underlying collection and keep a modification counter or a version number. Each time the collection is structurally modified (e.g., by adding or removing elements), the counter is incremented. When an iterator detects that the counter has changed during iteration, it throws a `ConcurrentModificationException`.
+- **Usage**: Fail-fast iterators are typically used in most Java collections (`ArrayList`, `HashMap`, etc.).
+- **Example**:
+  ```java
+  List<Integer> list = new ArrayList<>();
+  list.add(1);
+  list.add(2);
+  Iterator<Integer> iterator = list.iterator();
+  while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+      list.add(3); // ConcurrentModificationException is thrown
+  }
+  ```
+
+### Fail-Safe Iterator:
+- **Behavior**: Fail-safe iterators do not throw a `ConcurrentModificationException` even if the underlying collection is modified structurally during iteration. Instead, they operate on a copy of the underlying collection or use some mechanism to isolate themselves from concurrent modifications.
+- **Implementation**: They work on a snapshot of the underlying collection taken at the time of creation or maintain their own internal copy of the collection. This ensures that they iterate over the elements as they were at the time of iteration.
+- **Usage**: Fail-safe iterators are not commonly used in standard Java collections, but they are prevalent in concurrent collections (e.g., `ConcurrentHashMap`).
+- **Example**:
+  ```java
+  Map<Integer, String> map = new ConcurrentHashMap<>();
+  map.put(1, "One");
+  map.put(2, "Two");
+  Iterator<Map.Entry<Integer, String>> iterator = map.entrySet().iterator();
+  while (iterator.hasNext()) {
+      Map.Entry<Integer, String> entry = iterator.next();
+      System.out.println(entry.getKey() + " - " + entry.getValue());
+      map.put(3, "Three"); // Iteration continues without exceptions
+  }
+  ```
+
+### Key Differences:
+- **Exception Handling**: Fail-fast iterators throw a `ConcurrentModificationException`, while fail-safe iterators do not.
+- **Underlying Mechanism**: Fail-fast iterators directly operate on the underlying collection, while fail-safe iterators work on a copy or snapshot of the collection.
+- **Thread Safety**: Fail-fast iterators are not inherently thread-safe, while fail-safe iterators are typically used in concurrent environments and offer better thread safety.
+
+In summary, fail-fast iterators immediately detect and throw an exception if the underlying collection is modified during iteration, while fail-safe iterators continue iterating over a snapshot or copy of the collection without throwing exceptions. The choice between the two depends on the specific requirements and concurrency characteristics of the application.
