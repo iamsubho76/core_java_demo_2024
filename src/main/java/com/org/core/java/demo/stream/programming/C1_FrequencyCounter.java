@@ -42,9 +42,21 @@ public class C1_FrequencyCounter {
                                 Function.identity()
                                 , Collectors.counting()
                         ));
-        System.out.println(namesCount);
-        System.out.println("Word frequency of complete sentence: " + namesCount);
+        System.out.println("Word frequency of complete list: " + namesCount);
         System.out.println("Total number of elements:: " + names.stream().count());
+        System.out.println("===============================================================");
+        char[] c = {'A', 'B', 'C', 'A', 'C', 'D', 'A', 'D'};
+
+        // Calculate frequency of each character
+        Map<Character, Long> frequencyMap = new String(c).chars()
+                .mapToObj(ch -> (char) ch)
+                .collect(Collectors.groupingBy(ch -> ch, Collectors.counting()));
+
+        // Sort by value (frequency) in ascending order and print
+        frequencyMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .forEach(entry -> System.out.println("Character: " + entry.getKey() + ", Frequency: " + entry.getValue()));
+        System.out.println("===============================================================");
 
         String getRepeatedWordCount = "aa bb gg hh yy uu aa bb";
 
